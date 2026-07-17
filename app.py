@@ -211,6 +211,129 @@ st.markdown("""
         top: -50px;
         right: -50px;
     }
+
+    /* ── Responsive Styling ── */
+    html {
+        font-size: 16px;
+    }
+    @media (max-width: 1200px) {
+        html {
+            font-size: 15px;
+        }
+    }
+    @media (max-width: 768px) {
+        html {
+            font-size: 14px;
+        }
+        .app-title {
+            font-size: 2.0rem;
+        }
+        .app-subtitle {
+            font-size: 0.95rem;
+            margin-bottom: 1.5rem;
+        }
+        .cluster-card {
+            padding: 20px !important;
+            border-radius: 16px !important;
+            margin-top: 15px !important;
+            margin-bottom: 20px !important;
+        }
+        .cluster-card h2 {
+            font-size: 1.5rem !important;
+        }
+        .cluster-card p {
+            font-size: 0.95rem !important;
+        }
+    }
+
+    /* ── Brand Logo Header Responsiveness ── */
+    .brand-header {
+        position: fixed;
+        top: 15px;
+        left: 30px;
+        z-index: 999999;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        pointer-events: none;
+    }
+    .brand-logo {
+        height: 28px;
+        width: auto;
+        object-fit: contain;
+    }
+    .brand-title {
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, #FFD54F 0%, #FF7043 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.5));
+    }
+    @media (max-width: 768px) {
+        .brand-header {
+            top: 10px;
+            left: 15px;
+            gap: 4px;
+        }
+        .brand-logo {
+            height: 22px !important;
+        }
+        .brand-title {
+            font-size: 1.1rem !important;
+        }
+    }
+
+    /* ── Column Layout Responsiveness ── */
+    @media (max-width: 991px) {
+        /* Stacking layout columns ([1, 2, 1]) and hiding empty ones */
+        div[data-testid="stHorizontalBlock"]:not(:has(.dest-card)):not(div[data-testid="stExpander"] *) {
+            flex-wrap: wrap !important;
+        }
+        div[data-testid="stHorizontalBlock"]:not(:has(.dest-card)):not(div[data-testid="stExpander"] *) > div[data-testid="column"]:not(:has(div[data-testid="stMarkdown"], div[data-testid="stSelectbox"], div[data-testid="stMultiSelect"], div[data-testid="stButton"], div[data-testid="stHeading"], p, img)) {
+            display: none !important;
+            width: 0px !important;
+            flex: 0 0 0px !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        div[data-testid="stHorizontalBlock"]:not(:has(.dest-card)):not(div[data-testid="stExpander"] *) > div[data-testid="column"]:has(div[data-testid="stMarkdown"], div[data-testid="stSelectbox"], div[data-testid="stMultiSelect"], div[data-testid="stButton"], div[data-testid="stHeading"], p, img) {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+
+        /* Responsive Columns for Recommendation Cards (2 columns on tablet) */
+        div[data-testid="stHorizontalBlock"]:has(.dest-card) {
+            flex-wrap: wrap !important;
+        }
+        div[data-testid="stHorizontalBlock"]:has(.dest-card) > div[data-testid="column"] {
+            min-width: calc(50% - 12px) !important;
+            flex: 1 1 calc(50% - 12px) !important;
+        }
+
+        /* Responsive Columns for Detail Buttons inside Expander (2 columns on tablet) */
+        div[data-testid="stExpander"] div[data-testid="stHorizontalBlock"] {
+            flex-wrap: wrap !important;
+        }
+        div[data-testid="stExpander"] div[data-testid="column"] {
+            min-width: calc(50% - 12px) !important;
+            flex: 1 1 calc(50% - 12px) !important;
+        }
+    }
+
+    @media (max-width: 599px) {
+        /* 1 column on mobile for Recommendation Cards */
+        div[data-testid="stHorizontalBlock"]:has(.dest-card) > div[data-testid="column"] {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+
+        /* 1 column on mobile for Detail Buttons inside Expander */
+        div[data-testid="stExpander"] div[data-testid="column"] {
+            min-width: 100% !important;
+            flex: 1 1 100% !important;
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -231,9 +354,9 @@ try:
     
     # 3. Injeksi HTML/CSS dengan Flexbox
     brand_html = f"""
-    <div style="position: fixed; top: 15px; left: 30px; z-index: 999999; display: flex; align-items: center; gap: 6px;">
-        <img src="data:image/png;base64,{logo_base64}" style="height: 28px; width: auto; object-fit: contain;">
-        <span style="font-weight: 700; font-size: 1.5rem; background: linear-gradient(135deg, #FFD54F 0%, #FF7043 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0px 1px 2px rgba(0,0,0,0.5));">TripMatch</span>
+    <div class="brand-header">
+        <img src="data:image/png;base64,{logo_base64}" class="brand-logo">
+        <span class="brand-title">TripMatch</span>
     </div>
     """
     st.markdown(brand_html, unsafe_allow_html=True)
@@ -340,7 +463,7 @@ except FileNotFoundError:
 
 # Main Header (Tugas 3)
 st.markdown('<div class="app-title">Where to?</div>', unsafe_allow_html=True)
-st.markdown('<div class="app-subtitle">Perjalanan singkat, cerita yang tak terlupakan.</div>', unsafe_allow_html=True)
+st.markdown('<div class="app-subtitle">Close your books, close your laptop. Sometimes, the best way to move forward is to take a break and explore</div>', unsafe_allow_html=True)
 
 # Memuat data destinasi
 try:
@@ -391,6 +514,8 @@ def get_dest_image_data_uri(place_name):
     gambar fallback 'gambar_tidak_tersedia.jpg'. Mengembalikan None jika keduanya
     tidak ada (supaya card tetap tampil tanpa gambar, tidak error).
     """
+    # Pastikan place_name selalu string (beberapa nilai bisa bertipe integer/numeric)
+    place_name = str(place_name)
     candidate_extensions = [".jpg", ".jpeg", ".png", ".webp", ".JPG", ".JPEG", ".PNG", ".WEBP"]
 
     for ext in candidate_extensions:
@@ -400,7 +525,7 @@ def get_dest_image_data_uri(place_name):
                 b64 = get_image_base64(candidate_path)
                 return f"data:image/{_mime_from_ext(ext)};base64,{b64}"
             except Exception:
-                break
+                raise
 
     # Fallback ke gambar default jika gambar destinasi belum tersedia
     fallback_path = os.path.join(ASSETS_DIR, FALLBACK_IMAGE_NAME)
@@ -419,6 +544,8 @@ def get_detail_image_data_uri(place_name):
     Mencari gambar detail di folder Assets/ dengan nama '{place_name}1.ext'.
     Jika tidak ditemukan, pakai gambar fallback 'gambar_tidak_tersedia.jpg'.
     """
+    # Pastikan place_name selalu string (beberapa nilai bisa bertipe integer/numeric)
+    place_name = str(place_name)
     candidate_extensions = [".jpg", ".jpeg", ".png", ".webp", ".JPG", ".JPEG", ".PNG", ".WEBP"]
 
     for ext in candidate_extensions:
@@ -428,7 +555,7 @@ def get_detail_image_data_uri(place_name):
                 b64 = get_image_base64(candidate_path)
                 return f"data:image/{_mime_from_ext(ext)};base64,{b64}"
             except Exception:
-                break
+                raise
 
     # Fallback ke gambar default
     fallback_path = os.path.join(ASSETS_DIR, FALLBACK_IMAGE_NAME)
@@ -442,7 +569,7 @@ def get_detail_image_data_uri(place_name):
     return None
 
 
-@st.dialog("Detail Destinasi", width="large")
+@st.dialog("Detail Destinasi", width="medium")
 def show_dest_detail(row):
     """Popup dialog yang menampilkan detail lengkap sebuah destinasi wisata."""
     place_name = row['Place_Name']
@@ -518,7 +645,7 @@ def render_dest_cards_horizontal(candidates, height=620):
             <div class="dest-card-body">
                 <div class="dest-title">{row['Place_Name']}</div>
                 <div class="dest-meta">📍 {row['City']}</div>
-                <div>
+                <div style="display: flex; flex-wrap: wrap;">
                     <span class="dest-badge">💵 Est. Biaya: {format_rupiah(row['Estimasi Biaya Kunjungan'])}</span>
                     <span class="dest-badge">🕒 Durasi: {row['Durasi Perjalan']}</span>
                 </div>
@@ -547,21 +674,25 @@ def render_dest_cards_horizontal(candidates, height=620):
         .dest-scroll-container {{
             display: flex;
             gap: 24px;
-            overflow-x: scroll;             /* scroll = selalu tampil, bukan auto */
+            overflow-x: scroll;
             overflow-y: hidden;
             cursor: grab;
-            padding: 4px 4px 24px 4px;     /* padding bawah cukup untuk scrollbar */
+            padding: 4px 4px 24px 4px;
             box-sizing: border-box;
             user-select: none;
-            /* Firefox */
             scrollbar-width: auto;
             scrollbar-color: #1A8CFF rgba(255,255,255,0.10);
+        }}
+        @media (max-width: 599px) {{
+            .dest-scroll-container {{
+                gap: 16px;
+                padding-bottom: 16px;
+            }}
         }}
         .dest-scroll-container.grabbing {{
             cursor: grabbing;
         }}
 
-        /* ── Webkit Scrollbar — lebih tebal & terlihat ── */
         .dest-scroll-container::-webkit-scrollbar {{
             height: 10px;
         }}
@@ -580,18 +711,16 @@ def render_dest_cards_horizontal(candidates, height=620):
             background: linear-gradient(90deg, #00e5ff 0%, #3fa9ff 60%, #a040ff 100%);
         }}
 
-        /* ── Scroll shadow effect ── */
         .scroll-wrapper {{
             position: relative;
             width: 100%;
         }}
 
-        /* Fade kiri — tampil saat ada konten tersembunyi di kiri */
         .scroll-fade-left,
         .scroll-fade-right {{
             position: absolute;
             top: 0;
-            bottom: 10px;           /* tidak menutupi scrollbar */
+            bottom: 10px;
             width: 60px;
             pointer-events: none;
             z-index: 10;
@@ -607,7 +736,6 @@ def render_dest_cards_horizontal(candidates, height=620):
             background: linear-gradient(to left, rgba(11, 14, 23, 0.85), transparent);
         }}
 
-        /* Scroll hint badge */
         .scroll-hint {{
             position: absolute;
             bottom: 22px;
@@ -626,7 +754,6 @@ def render_dest_cards_horizontal(candidates, height=620):
             letter-spacing: 0.03em;
         }}
 
-        /* Lebar card dihitung agar PAS 3 card penuh terlihat di satu layar */
         .dest-card {{
             background: rgba(30, 41, 59, 0.6);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -634,17 +761,32 @@ def render_dest_cards_horizontal(candidates, height=620):
             overflow: hidden;
             transition: background 0.3s ease, border-color 0.3s ease;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            flex: 0 0 calc((100% - 2 * 24px) / 3);
-            width: calc((100% - 2 * 24px) / 3);
             box-sizing: border-box;
             display: flex;
             flex-direction: column;
+        }}
+        @media (min-width: 992px) {{
+            .dest-card {{
+                flex: 0 0 calc((100% - 2 * 24px) / 3);
+                width: calc((100% - 2 * 24px) / 3);
+            }}
+        }}
+        @media (min-width: 600px) and (max-width: 991px) {{
+            .dest-card {{
+                flex: 0 0 calc((100% - 24px) / 2);
+                width: calc((100% - 24px) / 2);
+            }}
+        }}
+        @media (max-width: 599px) {{
+            .dest-card {{
+                flex: 0 0 82%;
+                width: 82%;
+            }}
         }}
         .dest-card:hover {{
             background: rgba(30, 41, 59, 0.9);
             border-color: rgba(26, 140, 255, 0.4);
         }}
-        /* Container gambar dikonsistenkan rasio 4:3, gambar boleh terpotong (object-fit: cover) */
         .dest-card-image {{
             width: 100%;
             aspect-ratio: 4 / 3;
@@ -660,6 +802,11 @@ def render_dest_cards_horizontal(candidates, height=620):
         }}
         .dest-card-body {{
             padding: 20px 24px 24px 24px;
+        }}
+        @media (max-width: 599px) {{
+            .dest-card-body {{
+                padding: 16px;
+            }}
         }}
         .dest-title {{
             font-size: 1.3rem;
@@ -1046,9 +1193,11 @@ if st.session_state.selected_pref and st.session_state.selected_subpref and st.s
                         <div class="dest-meta">📍 {row['City']}</div>
                         <div style="border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; margin-top: 12px;">
                             <div style="font-size: 0.75rem; color: #64748B; margin-bottom: 8px;">Kecocokan Profil:</div>
-                            <span class="{b_class}">💵 Cost: {format_rupiah(est_cost)}</span>
-                            <span class="{d_class}">🕒 Durasi: {row['Durasi Perjalan']}</span>
-                            <span class="{t_class}">🚗 Trans.: {", ".join(user_transport) if user_transport else "-"}</span>
+                            <div style="display: flex; flex-wrap: wrap;">
+                                <span class="{b_class}">💵 Cost: {format_rupiah(est_cost)}</span>
+                                <span class="{d_class}">🕒 Durasi: {row['Durasi Perjalan']}</span>
+                                <span class="{t_class}">🚗 Trans.: {", ".join(user_transport) if user_transport else "-"}</span>
+                            </div>
                         </div>
                     </div>
                 </div>
