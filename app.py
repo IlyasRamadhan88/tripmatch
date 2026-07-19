@@ -434,7 +434,7 @@ try:
             var prefSelected = false;
             for (var i = 0; i < selects.length; i++) {
                 var txt = selects[i].textContent.trim();
-                if (txt && txt !== 'Pilih Preferensi...') {
+                if (txt && txt !== 'Pilih Jenis Wisata...') {
                     prefSelected = true;
                     break;
                 }
@@ -462,8 +462,8 @@ except FileNotFoundError:
     pass  # Jika background tidak ditemukan, pakai gradient default
 
 # Main Header (Tugas 3)
-st.markdown('<div class="app-title">Where to?</div>', unsafe_allow_html=True)
-st.markdown('<div class="app-subtitle">Close your books, close your laptop. Sometimes, the best way to move forward is to take a break and explore</div>', unsafe_allow_html=True)
+st.markdown('<div class="app-title">Mau Liburan ke Mana?</div>', unsafe_allow_html=True)
+st.markdown('<div class="app-subtitle">Temukan destinasi wisata yang sesuai dengan minat dan gaya perjalanan Anda</div>', unsafe_allow_html=True)
 
 # Memuat data destinasi
 try:
@@ -646,7 +646,7 @@ def render_dest_cards_horizontal(candidates, height=620):
                 <div class="dest-title">{row['Place_Name']}</div>
                 <div class="dest-meta">📍 {row['City']}</div>
                 <div style="display: flex; flex-wrap: wrap;">
-                    <span class="dest-badge">💵 Est. Biaya: {format_rupiah(row['Estimasi Biaya Kunjungan'])}</span>
+                    <span class="dest-badge">💵 Estimasi Anggaran {format_rupiah(row['Estimasi Biaya Kunjungan'])}</span>
                     <span class="dest-badge">🕒 Durasi: {row['Durasi Perjalan']}</span>
                 </div>
                 <div style="margin-top: 8px;">
@@ -929,11 +929,11 @@ user_duration = None
 col1, col2, col3 = st.columns([1, 2, 1])
 
 with col2:
-    st.markdown('<div class="section-title">Preferensi Wisata Utama</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Pilih Jenis Wisata</div>', unsafe_allow_html=True)
 
     # 1. Buat teks label kustom Anda sendiri dengan class CSS baru (misal: "custom-label")
-    st.markdown('<div class="custom-label">Kategori wisata apa yang paling ingin Anda kunjungi?</div>', unsafe_allow_html=True)
-    preferensi_options = ["Pilih Preferensi..."] + get_preferensi_list(df_dest)
+    st.markdown('<div class="custom-label">Jenis wisata apa yang paling ingin Anda kunjungi?</div>', unsafe_allow_html=True)
+    preferensi_options = ["Pilih Jenis Wisata..."] + get_preferensi_list(df_dest)
     selected_pref = st.selectbox(
         "",
         options=preferensi_options,
@@ -943,7 +943,7 @@ with col2:
     )
     
     # Update session state jika preferensi berubah
-    if selected_pref != "Pilih Preferensi...":
+    if selected_pref != "Pilih Jenis Wisata...":
         if st.session_state.selected_pref != selected_pref:
             st.session_state.selected_pref = selected_pref
             st.session_state.selected_subpref = None
@@ -962,8 +962,8 @@ if st.session_state.selected_pref:
     # tetap ada jarak tipis mengikuti padding bawaan Streamlit (bukan menempel mepet ke tepi).
     candidates_pref = filter_destinations(df_dest, st.session_state.selected_pref, None)
 
-    st.markdown(f'<div class="section-title">Destinasi Wisata ({len(candidates_pref)} Ditemukan)</div>', unsafe_allow_html=True)
-    st.write(f"Berikut seluruh destinasi wisata untuk preferensi **{st.session_state.selected_pref}**:")
+    st.markdown(f'<div class="section-title">Pilihan Destinasi ({len(candidates_pref)} Ditemukan)</div>', unsafe_allow_html=True)
+    st.write(f"Berikut pilihan destinasi wisata bertema **{st.session_state.selected_pref}**:")
     render_dest_cards_horizontal(candidates_pref)
 
     # --- Tombol Detail untuk setiap card di horizontal scroll ---
@@ -984,17 +984,17 @@ if st.session_state.selected_pref:
 
     with sub_col2:
         # LANGKAH 3: SUBPREFERENSI
-        st.markdown(f'<div class="section-title">Subpreferensi Wisata {st.session_state.selected_pref}</div>', unsafe_allow_html=True)
+        st.markdown(f'<div class="section-title">Pilih Tema Wisata {st.session_state.selected_pref}</div>', unsafe_allow_html=True)
 
-        subpref_options = ["Pilih Subpreferensi..."] + get_subpreferensi_by_preferensi(df_dest, st.session_state.selected_pref)
+        subpref_options = ["Pilih Tema Wisata..."] + get_subpreferensi_by_preferensi(df_dest, st.session_state.selected_pref)
         selected_subpref = st.selectbox(
-            f"Subpreferensi {st.session_state.selected_pref} mana yang paling menarik bagi Anda?",
+            f"Tema wisata {st.session_state.selected_pref} mana yang paling Anda minati?",
             options=subpref_options,
             index=0,
             key="subpref_selectbox"
         )
 
-        if selected_subpref != "Pilih Subpreferensi...":
+        if selected_subpref != "Pilih Tema Wisata...":
             st.session_state.selected_subpref = selected_subpref
         else:
             st.session_state.selected_subpref = None
@@ -1007,8 +1007,8 @@ if st.session_state.selected_pref:
     if st.session_state.selected_subpref:
         candidates_subpref = filter_destinations(df_dest, st.session_state.selected_pref, st.session_state.selected_subpref)
 
-        st.markdown(f'<div class="section-title">Destinasi Wisata ({len(candidates_subpref)} Ditemukan)</div>', unsafe_allow_html=True)
-        st.write(f"Berikut destinasi wisata untuk preferensi **{st.session_state.selected_pref}** - subpreferensi **{st.session_state.selected_subpref}** (geser kartu ke kiri/kanan):")
+        st.markdown(f'<div class="section-title">Pilihan Destinasi ({len(candidates_subpref)} Ditemukan)</div>', unsafe_allow_html=True)
+        st.write(f"Berikut destinasi wisata **{st.session_state.selected_pref}** dengan tema **{st.session_state.selected_subpref}** yang dapat Anda pilih.")
         render_dest_cards_horizontal(candidates_subpref)
 
         # --- Tombol Detail untuk setiap card di horizontal scroll ---
@@ -1026,19 +1026,19 @@ if st.session_state.selected_pref:
         # LANGKAH 5: FORM PROFIL PERJALANAN — kembali ke kolom tengah (narrower), muncul di bawah section destinasi
         form_col1, form_col2, form_col3 = st.columns([1, 2, 1])
         with form_col2:
-            st.markdown('<div class="section-title">Profil Perilaku Perjalanan Anda</div>', unsafe_allow_html=True)
-            st.write("Isi formulir di bawah ini untuk menentukan karakteristik kelompok (cluster) perjalanan Anda menggunakan K-Means.")
+            st.markdown('<div class="section-title">Profil Perjalanan Anda</div>', unsafe_allow_html=True)
+            st.write("Lengkapi informasi perjalanan berikut agar kami dapat memberikan rekomendasi destinasi yang paling sesuai untuk Anda.")
 
             # Pilihan Form
-            budget_form_options = ["Pilih estimasi budget perjalanan Anda..."] + BUDGET_OPTIONS
-            user_budget_raw = st.selectbox("1. Estimasi Budget Perjalanan", budget_form_options, index=0)
+            budget_form_options = ["Pilih estimasi anggaran perjalanan Anda..."] + BUDGET_OPTIONS
+            user_budget_raw = st.selectbox("1. Estimasi Anggaran Perjalanan", budget_form_options, index=0)
             user_budget = user_budget_raw if user_budget_raw != budget_form_options[0] else None
 
             user_transport = st.multiselect(
-                "2. Moda Transportasi Utama",
+                "2. Transportasi yang Akan Digunakan",
                 options=list(TRANSPORT_OPTIONS_MAP.keys()),
                 default=[],
-                placeholder="Pilih satu atau lebih moda transportasi Anda..."
+                placeholder="Pilih satu atau lebih jenis transportasi yang akan Anda gunakan."
             )
 
             durasi_form_options = ["Pilih durasi perjalanan Anda..."] + DURASI_OPTIONS
@@ -1077,7 +1077,7 @@ if st.session_state.selected_pref and st.session_state.selected_subpref and st.s
         <div class="cluster-glow" style="background: {profile['color']};"></div>
         <div style="position: relative; z-index: 2;">
             <span style="background: {profile['color']}; color: #FFF; padding: 6px 14px; border-radius: 30px; font-size: 0.85rem; font-weight: 600; text-transform: uppercase;">
-                Cluster Terdeteksi: {cluster_id}
+                Profil Perjalanan Anda: Cluster {cluster_id}
             </span>
             <h2 style="margin-top: 15px; font-weight: 700; color: #FFF;">{profile['name']}</h2>
             <p style="font-size: 1.1rem; color: #CBD5E1; margin-bottom: 20px; line-height: 1.6;">{profile['description']}</p>
@@ -1092,7 +1092,7 @@ if st.session_state.selected_pref and st.session_state.selected_subpref and st.s
     """, unsafe_allow_html=True)
     
     # Rekomendasi Tersegementasi: Menampilkan rekomendasi dan memberi kecocokan filter
-    st.markdown('<div class="section-title">Rekomendasi Destinasi Wisata Berdasarkan Cluster</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-title">Rekomendasi Destinasi untuk Anda</div>', unsafe_allow_html=True)
     
     # Grid columns untuk rekomendasi final
     candidates = filter_destinations(df_dest, st.session_state.selected_pref, st.session_state.selected_subpref)
@@ -1152,13 +1152,13 @@ if st.session_state.selected_pref and st.session_state.selected_subpref and st.s
         fallback_1 = [c for c in scored_candidates if c['num_mismatches'] <= 1]
         if len(fallback_1) > 0:
             display_candidates = fallback_1
-            narrative_text = "Destinasi Wisata yang cocok dengan profil anda sangat terbatas. Berikut yang paling cocok: "
+            narrative_text = "Berdasarkan pilihan Anda, berikut destinasi wisata yang paling sesuai."
         else:
             # Fallback 2: maksimal ada 2 kecocokan profil yang tidak cocok (artinya <= 2 mismatch)
             fallback_2 = [c for c in scored_candidates if c['num_mismatches'] <= 2]
             if len(fallback_2) > 0:
                 display_candidates = fallback_2
-                narrative_text = "Destinasi Wisata yang cocok dengan profil anda sangat terbatas. Berikut yang paling cocok: "
+                narrative_text = "Berdasarkan pilihan Anda, berikut destinasi wisata yang paling sesuai."
             else:
                 narrative_text = "Tidak ada destinasi wisata yang cocok dengan profil perjalanan Anda."
                 
